@@ -1,2 +1,2 @@
 # Praat-scripts-for-stimulus-creation
-These scripts facilitate the creation of stimuli for listening experiments, for example by concatenating sound files, replacing segments with noise or manipulating specified segments.
+Open each script to see basic instructions for use, and attribution. These scripts come with no guarantee of functionality.
