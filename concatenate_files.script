@@ -1,0 +1,67 @@
+##########################################################################
+## This script goes through a directory, contatenating files exhaustively
+## with a user-specified silence in between. Contatenated versions are 
+## saved in a new subdirectory.
+##
+## Written by Shigeto Kawahara, first used by Leendert Plug October 2016.
+##
+## The original script asks only for a name for the output directory. In 
+## my uses of this, the output directory would be created in the directory
+## from which Praat is launched, not the input directory -- hence the form
+## asking for two full pathway specifications.
+##
+##########################################################################
+
+form Files
+	comment Copy the name of the directory that contains your sound files before the slash
+	sentence InputDir \
+	comment Specify the silence duration you want between the concatenated files 
+	positive silenceDur 0.5
+        comment  Specify the directory again to create a subdirectory called 'paired' (or something else)
+	sentence OutputDir \paired
+endform
+
+createDirectory (outputDir$)
+
+Create Strings as file list... list 'inputDir$'*.wav
+numberOfFiles= Get number of strings
+
+for i to numberOfFiles
+
+## The next bit opens the first file
+
+	select Strings list
+	fileName1$ = Get string... i
+	Read from file... 'inputDir$''fileName1$'
+	soundOne$=selected$("Sound")
+
+## The next bit creates the silence
+
+		silence$ = Create Sound from formula... silence Mono 0 silenceDur 44100  0
+		silenceSound$=selected$("Sound")
+
+## The next bit opens the second file
+		
+			for k to numberOfFiles
+			select Strings list
+			fileName2$ = Get string... k
+				if k <> i
+				Read from file... 'inputDir$''fileName2$'
+				soundTwo$=selected$("Sound")
+
+# The next bit does the concatenation	
+					select Sound 'soundOne$'
+					plus Sound 'silenceSound$'
+					plus Sound 'soundTwo$'
+					Concatenate
+
+					name$ = fileName1$ - ".wav"
+					Write to WAV file... 'outputDir$'\'name$'_'fileName2$'
+				endif
+			endfor
+endfor
+
+
+select all
+Remove
+print Done.
