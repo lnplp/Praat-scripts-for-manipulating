@@ -1,0 +1,49 @@
+##########################################################################################
+## This is a reduced version of Daniel McCloy's white noise insertion script
+## which can be used for example to clean up voiceless plosive hold phases prior to 
+## cross-splicing. The script needs to be run FROM THE EDITOR WINDOW, and a 
+## section of the sound file needs to be selected before running. 
+##
+## The desired rms amplitude of the noise is hard-coded (in McCloy's script
+## it is measured in the surrounding context). If set to 0, pure silence is inserted.
+## Usually more realistic is very low-amplitude noise; a good place to start is at 
+## 0.0005.
+##
+## McCloy's script is at 
+## https://github.com/drammock/praat-semiauto/blob/master/ReplaceSelectionWithNoise.praat
+##
+## Last edited by Leendert Plug, June 2019
+##########################################################################################
+
+
+ed_info$ = Editor info
+	sn_info$ = nocheck Sound info
+	tmp_snd = Extract selected sound (preserve times)
+	Close
+endeditor
+
+win_st = extractNumber (ed_info$, "Window start:")
+win_nd = extractNumber (ed_info$, "Window end:")
+sel_st = extractNumber (ed_info$, "Selection start:")
+sel_nd = extractNumber (ed_info$, "Selection end:")
+tg_name$ = extractWord$ (ed_info$, "Data name:")
+sn_name$ = extractWord$ (sn_info$, "Object name:")
+
+########################################################################################
+## Here you need to set the rms amplitude: zero for pure silence, or a slightly 
+## larger number for low-amplitude noise.
+########################################################################################
+
+selectObject: tmp_snd
+rms = 0.0005
+Remove
+
+	selectObject: "Sound " + sn_name$
+	Formula (part): sel_st, sel_nd, 1, 1, "randomGauss(0," + string$(rms) +")"
+endif
+# Re-open TextGrid editor
+plusObject: "TextGrid " + tg_name$
+View & Edit
+editor: "TextGrid " + tg_name$
+	Zoom: win_st, win_nd
+Select: sel_st, sel_nd
