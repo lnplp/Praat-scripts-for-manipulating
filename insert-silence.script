@@ -38,12 +38,12 @@ selectObject: tmp_snd
 rms = 0.0005
 Remove
 
-	selectObject: "Sound " + sn_name$
-	Formula (part): sel_st, sel_nd, 1, 1, "randomGauss(0," + string$(rms) +")"
-endif
-# Re-open TextGrid editor
+selectObject: "Sound " + sn_name$
+Formula (part): sel_st, sel_nd, 1, 1, "randomGauss(0," + string$(rms) +")"
+
 plusObject: "TextGrid " + tg_name$
 View & Edit
+
 editor: "TextGrid " + tg_name$
 	Zoom: win_st, win_nd
 Select: sel_st, sel_nd
