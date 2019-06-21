@@ -5,4 +5,4 @@ Open each script to see basic instructions for use, and attribution. These scrip
 
 **set_interval_duration.script** allows the user to lengthen or shorten a specific Textgrid interval through PSOLA resynthesis; the rest of the file is not adjusted (so lengthens or shortens accordingly).
 
-**set_fileduration_intensity.script** allows the user to lengthen or shorten all soundfiles in a given directory to a target duration through PSOLA resynthesis; average intensity ican be set too.
+**set_fileduration_intensity.script** allows the user to lengthen or shorten all soundfiles in a given directory through PSOLA resynthesis; average intensity ican be adjusted too.
