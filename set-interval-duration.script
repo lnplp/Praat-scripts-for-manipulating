@@ -1,0 +1,111 @@
+##################################################################################################
+##
+## This script changes the duration of a specified Textgrid interval through PSOLA resynthesis to
+## a user-specified target duration. The manipulation is not exact, but probably close enough for
+## most purposes. Note that the manipulation period starts a fraction after the interval onset and 
+## ends a fraction after its offset. This works for initial intervals; for final intervals 
+## the offset would be after the file end, which may create weird results (running with the onset 
+## fraction before the file start produced manipulations that were well off the target duration).
+## So these fractions should be checked when manipulating initial or final intervals.
+##
+## The duration should be specified in milliseconds; this is converted into seconds where appropriate.
+##
+## The script is a simplified version of a more elaborate manipulation script written by Rachel Smith
+## (University of Glasgow).
+##
+## Last edited by Leendert Plug, June 2019.
+##
+###################################################################################################
+
+Form Specify directories and and parameters for analysis
+   	comment Which directory contains your sound files?
+	text sounddirectory ...\
+ 	comment Which tier of the TextGrid object would you like to analyse?
+	integer tier 1
+	comment Specify the label of the interval you want to manipulate.
+	sentence Interval label
+	comment Desired interval duration in ms:	
+	natural iMs 1200
+	comment Where would you like to store your new files?
+	text outputdirectory ...\
+endform
+
+## convert iMs to seconds
+iSec = iMs/1000
+
+## find all wav files in the soundfile directory 
+Create Strings as file list... list 'sounddirectory$'\*.wav  
+number_files = Get number of strings
+
+## start the main loop
+for a from 1 to number_files
+	select Strings list
+	current_file$ = Get string... 'a'
+	printline Processing file: 'current_file$'...      
+	base$ = replace$ (current_file$, ".wav", "", 0)
+	Read from file... 'sounddirectory$'\'base$'.wav
+	Read from file... 'sounddirectory$'\'base$'.TextGrid
+
+	## select the TextGrid and get its end time and thus total duration
+	select TextGrid 'base$'
+	totalDur = Get end time
+	
+	## check how many intervals there are in the selected tier:
+	numberOfIntervals = Get number of intervals... tier
+
+	## extract interval duration measures from the tier:
+	for interval from 1 to numberOfIntervals
+		label$ = Get label of interval... tier interval
+		if label$ = interval$
+			iStart = Get starting point... tier interval
+			iEnd = Get end point... tier interval
+			iDuration = iEnd - iStart
+			printline Interval duration = 'iDuration' 
+		endif
+	endfor
+
+	printline Original segment duration = 'iDuration'
+	printline New segment duration = 'iSec'
+
+	## calculate scaling ratio to get new interval duration from current
+	scaleRatio = iSec/iDuration
+	printline Scaling ratio for vowel = 'scaleRatio'
+
+	## select the Sound and make a Manipulation object:
+	select Sound 'base$'
+	To Manipulation... 0.01 75 600	
+
+	## make a new duration tier and delimit the manipulation interval
+	select Sound 'base$'
+	Create DurationTier... 'base$'_'iMs' 0 totalDur
+	Add point... 0 1
+	Add point... iStart 1
+	Add point... iStart+0.00001 scaleRatio
+	Add point... iEnd scaleRatio
+	Add point... iEnd+0.00001 1
+	Add point... totalDur 1
+
+	## select Manipulation object and replace its Duration tier with the new one
+	select DurationTier 'base$'_'iMs'
+	plus Manipulation 'base$'
+	Replace duration tier
+
+	## resynthesise and save
+	select Manipulation 'base$'
+	Get resynthesis (overlap-add)
+	Write to WAV file... 'outputdirectory$'\'base$'_'iMs'.wav
+
+	## clean up by removing the temporary objects from the object list
+	select Sound 'base$'
+	plus TextGrid 'base$'
+	plus Manipulation 'base$'
+	plus DurationTier 'base$'_'iMs'
+	Remove
+
+	printline Saving new sound file 'base$'_'iMs'.wav
+	printline --
+
+## end the main loop
+endfor
+
+print Done.
