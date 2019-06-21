@@ -1,0 +1,42 @@
+#####################################################################################
+## This script loops through a directory, adjusting the soundfile durations to a set
+## target using PSOLA resynthesis. Intensity is also scaled to an average input by the 
+## user.
+##
+## Note that resynthesis pitch range (75-600) is the default. Depending on the input
+## quality, narrowing the range may improve output quality.
+##
+## Leendert Plug, October 2016
+#####################################################################################
+
+
+form Directories and analysis parameters
+	comment Specify the input directory
+	sentence InputDir ...\
+	comment Choose a name for the output directory
+	sentence OutputDir ...\
+        comment Target duration (seconds)
+	positive target 1.5
+	comment Desired average intensity (dB SPL):
+	natural intensity 62
+endform
+
+Create Strings as file list...  list 'inputDir$'*.wav
+number_files = Get number of strings
+
+for i from 1 to number_files
+	select Strings list
+	current_file$=Get string... 'i'
+	Read from file... 'inputDir$''current_file$'
+	sound1$=selected$("Sound")
+	duration = Get end time
+
+		change_factor = target / duration
+		Lengthen (overlap-add)... 75 600 change_factor
+		Scale intensity... intensity
+		Write to WAV file... 'outputDir$'\'current_file$'
+endfor
+
+select all
+Remove
+print Done.
