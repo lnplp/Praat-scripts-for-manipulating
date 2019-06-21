@@ -17,7 +17,7 @@
 ##
 ###################################################################################################
 
-Form Specify directories and and parameters for analysis
+form Specify directories and and parameters for analysis
    	comment Which directory contains your sound files?
 	text sounddirectory ...\
  	comment Which tier of the TextGrid object would you like to analyse?
