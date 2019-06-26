@@ -26,11 +26,11 @@ form Specify directories and parameters for analysis
 	natural iMs1 1000
 	comment Specify the label of the second interval you want to measure over.
 	sentence Interval2 2
-	comment Desired first interval duration in ms:	
+	comment Desired second interval duration in ms:	
 	natural iMs2 500
 	comment Specify the label of the third interval you want to measure over.
 	sentence Interval3 3
-	comment Desired first interval duration in ms:	
+	comment Desired third interval duration in ms:	
 	natural iMs3 1400
 	comment Where would you like to store your new files?
 	text outputdirectory N:\Faculty-of-AHC\Languages-Cultures-Societies\Subject-Areas\LingPhon\Staff file space\Leendert research\corley10\Jamie-audio\3 experimental_grouped\boy\durmanip\
