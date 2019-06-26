@@ -1,24 +1,24 @@
-##################################################################################################
-## This script changes the duration of three consecutive Textgrid intervals through PSOLA resynthesis to
+###########################################################################################################
+## This script changes the duration of five consecutive Textgrid intervals through PSOLA resynthesis to
 ## a user-specified target duration. The manipulation is not exact, but probably close enough for
 ## most purposes. The way the duration points are added means that the intervals do not need to cover
-## the entire file duration, but they do need to be consecutive. The script should also only be 
-## be run on files that all have the specific intervals. If they have only one or two, the script will
-## probably produce inaccurate results because of the way duration points are added. (I've saved separate
-## versions of the script for manipulating just one or two intervals.)
+## the entire file duration, but they do need to be consecutive. The duration should be specified in 
+## milliseconds; this is converted into seconds where appropriate.
 ##
-## The duration should be specified in milliseconds; this is converted into seconds where appropriate.
+## The script runs within a user-specified directory on a single user-specified file.
 ##
 ## The script is a simplified version of a more elaborate manipulation script written by Rachel Smith
 ## (University of Glasgow). 
 ##
 ## Last edited by Leendert Plug, June 2019.
-###################################################################################################
+###########################################################################################################
 
 form Specify directories and parameters for analysis
-   	comment Which directory contains your sound files?
-	text sounddirectory N:\Faculty-of-AHC\Languages-Cultures-Societies\Subject-Areas\LingPhon\Staff file space\Leendert research\corley10\Jamie-audio\3 experimental_grouped\boy\
- 	comment Which tier of the TextGrid object would you like to analyse?
+   	comment Which directory contains your sound files? (No final slash!)
+	text sounddirectory N:\Faculty-of-AHC\Languages-Cultures-Societies\Subject-Areas\LingPhon\Staff file space\Leendert research\corley10\Jamie-audio\recording_24_June2019\4_grouped_without_restrictive\boy
+    	comment What is the base name (without .wav) of the file you want to manipulate?
+	text base boy_repair
+	comment Which tier of the TextGrid object would you like to analyse?
 	integer tier 2
 	comment Specify the label of the first interval you want to measure over.
 	sentence Interval1 1
@@ -32,6 +32,14 @@ form Specify directories and parameters for analysis
 	sentence Interval3 3
 	comment Desired third interval duration in ms:	
 	natural iMs3 1400
+	comment Specify the label of the fourth interval you want to measure over.
+	sentence Interval4 er
+	comment Desired fourth interval duration in ms:	
+	natural iMs4 1400
+	comment Specify the label of the fifth interval you want to measure over.
+	sentence Interval5 4
+	comment Desired fifth interval duration in ms:	
+	natural iMs5 1400
 	comment Where would you like to store your new files?
 	text outputdirectory N:\Faculty-of-AHC\Languages-Cultures-Societies\Subject-Areas\LingPhon\Staff file space\Leendert research\corley10\Jamie-audio\3 experimental_grouped\boy\durmanip\
 endform
@@ -40,26 +48,18 @@ endform
 iSec1 = iMs1/1000
 iSec2 = iMs2/1000
 iSec3 = iMs3/1000
+iSec4 = iMs4/1000
+iSec5 = iMs5/1000
 
-##find all wav files in the directory matching desired pattern
-Create Strings as file list... list 'sounddirectory$'\*.wav  
-number_files = Get number of strings
+Read from file... 'sounddirectory$'\'base$'.wav
+Read from file... 'sounddirectory$'\'base$'.TextGrid
 
-##start the main loop
-for a from 1 to number_files
-	select Strings list
-	current_file$ = Get string... 'a'
-	printline Processing file: 'current_file$'...      
-	base$ = replace$ (current_file$, ".wav", "", 0)
-	Read from file... 'sounddirectory$'\'base$'.wav
-	Read from file... 'sounddirectory$'\'base$'.TextGrid
-
-	##select the TextGrid and get its end time and thus total duration
-	select TextGrid 'base$'
-	totalDur = Get end time
+##select the TextGrid and get its end time and thus total duration
+select TextGrid 'base$'
+totalDur = Get end time
 	
-	##check how many intervals there are in the selected tier:
-	numberOfIntervals = Get number of intervals... tier
+##check how many intervals there are in the selected tier:
+numberOfIntervals = Get number of intervals... tier
 
 	##extract interval duration measures from the tier:
 	for interval from 1 to numberOfIntervals
@@ -82,61 +82,94 @@ for a from 1 to number_files
 			iDuration3 = iEnd3 - iStart3
 			printline Interval duration = 'iDuration3:3' 
 		endif
+		if label$ = interval4$
+			iStart4 = Get starting point... tier interval
+			iEnd4 = Get end point... tier interval
+			iDuration4 = iEnd4 - iStart4
+			printline Interval duration = 'iDuration4:3' 
+		endif
+		if label$ = interval5$
+			iStart5 = Get starting point... tier interval
+			iEnd5 = Get end point... tier interval
+			iDuration5 = iEnd5 - iStart5
+			printline Interval duration = 'iDuration5:3' 
+		endif
 	endfor
 
-	printline Original first interval duration = 'iDuration1:3'
-	printline New first interval duration = 'iSec1'
-	printline Original second interval duration = 'iDuration2:3'
-	printline New second interval duration = 'iSec2'
-	printline Original third interval duration = 'iDuration3:3'
-	printline New third interval duration = 'iSec3'
+printline Original first interval duration = 'iDuration1:3'
+printline New first interval duration = 'iSec1'
+printline Original second interval duration = 'iDuration2:3'
+printline New second interval duration = 'iSec2'
+printline Original third interval duration = 'iDuration3:3'
+printline New third interval duration = 'iSec3'
+printline Original third interval duration = 'iDuration4:3'
+printline New third interval duration = 'iSec4'
+printline Original third interval duration = 'iDuration5:3'
+printline New third interval duration = 'iSec5'
 
-	##calculate scaling ratio to get new interval duration from old
-	scaleRatio1 = iSec1/iDuration1
-	printline Scaling ratio for first interval = 'scaleRatio1:3'
-	scaleRatio2 = iSec2/iDuration2
-	printline Scaling ratio for second interval = 'scaleRatio2:3'
-	scaleRatio3 = iSec3/iDuration3
-	printline Scaling ratio for third interval = 'scaleRatio3:3'
+##calculate scaling ratio to get new interval duration from old
+scaleRatio1 = iSec1/iDuration1
+printline Scaling ratio for first interval = 'scaleRatio1:3'
+scaleRatio2 = iSec2/iDuration2
+printline Scaling ratio for second interval = 'scaleRatio2:3'
+scaleRatio3 = iSec3/iDuration3
+printline Scaling ratio for third interval = 'scaleRatio3:3'
+scaleRatio4 = iSec4/iDuration4
+printline Scaling ratio for third interval = 'scaleRatio4:3'
+scaleRatio5 = iSec5/iDuration5
+printline Scaling ratio for third interval = 'scaleRatio5:3'
 
-	##select the Sound and make a Manipulation object:
-	select Sound 'base$'
-	To Manipulation... 0.01 75 600	
+##select the Sound and make a Manipulation object:
+select Sound 'base$'
+To Manipulation... 0.01 75 600	
 
-	##make a new duration tier and delimit the manipulation interval
-	select Sound 'base$'
-	Create DurationTier... 'base$'_'iMs1'_'iMs2'_'iMs3' 0 totalDur
-	Add point... 0.000 1
-	Add point... iStart1 1
-	Add point... iStart1+0.00001 scaleRatio1
-	Add point... iEnd1 scaleRatio1
-	Add point... iEnd1+0.00001 scaleRatio1
-	Add point... iStart2+0.000011 scaleRatio2
-	Add point... iEnd2-0.00001 scaleRatio2
-	Add point... iEnd2 scaleRatio2
-	Add point... iStart3+0.000011 scaleRatio3
-	Add point... iEnd3-0.000011 scaleRatio3
-	Add point... iEnd3-0.00001 1	
-	Add point... totalDur 1
+##make a new duration tier and delimit the manipulation interval
+select Sound 'base$'
+Create DurationTier... 'base$'_'iMs1' 0 totalDur
+Add point... 0.000 1
+Add point... iStart1 1
+Add point... iStart1+0.00001 scaleRatio1
+Add point... iEnd1 scaleRatio1
+Add point... iEnd1+0.00001 scaleRatio1
+Add point... iStart2+0.000011 scaleRatio2
+Add point... iEnd2-0.00001 scaleRatio2
+Add point... iEnd2 scaleRatio2
+Add point... iStart3+0.000011 scaleRatio3
+Add point... iEnd3-0.000011 scaleRatio3
+Add point... iEnd3 scaleRatio3
+Add point... iStart4+0.000011 scaleRatio4
+Add point... iEnd4-0.000011 scaleRatio4
+Add point... iEnd4 scaleRatio4
+Add point... iStart5+0.000011 scaleRatio5
+Add point... iEnd5-0.000011 scaleRatio5
+Add point... iEnd5-0.00001 1	
+Add point... totalDur 1
 
-	##select Manipulation object and replace its Duration tier with the new one
-	select DurationTier 'base$'_'iMs1'_'iMs2'_'iMs3'
-	plus Manipulation 'base$'
-	Replace duration tier
+##select Manipulation object and replace its Duration tier with the new one
+select DurationTier 'base$'_'iMs1'
+plus Manipulation 'base$'
+Replace duration tier
 
-	##resynthesise and save
-	select Manipulation 'base$'
-	Get resynthesis (overlap-add)
-	Write to WAV file... 'outputdirectory$'\'base$'_'iMs1'_'iMs2'_'iMs3'.wav
+##resynthesise and save
+select Manipulation 'base$'
+Get resynthesis (overlap-add)
+Write to WAV file... 'outputdirectory$'\'base$'_'iMs1'.wav
 
-	##clean up by removing the temporary objects from the object list
-	select Sound 'base$'
-	plus TextGrid 'base$'
-	plus Manipulation 'base$'
-	plus DurationTier 'base$'_'iMs1'_'iMs2'_'iMs3'
-	Remove
+##clean up by removing the temporary objects from the object list
+select Sound 'base$'
+plus TextGrid 'base$'
+plus Manipulation 'base$'
+plus DurationTier 'base$'_'iMs1'
+Remove
 
-	printline Saving new sound file 'base$'_'iMs1'_'iMs2'_'iMs3'.wav
-	printline --.
+printline Saving new sound file 'base$'_'iMs1'.wav
+printline --.
 
-endfor
+
+
+
+
+
+
+
+
