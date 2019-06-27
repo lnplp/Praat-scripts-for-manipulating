@@ -97,10 +97,10 @@ printline Original second interval duration = 'iDuration2:3'
 printline New second interval duration = 'iSec2'
 printline Original third interval duration = 'iDuration3:3'
 printline New third interval duration = 'iSec3'
-printline Original third interval duration = 'iDuration4:3'
-printline New third interval duration = 'iSec4'
-printline Original third interval duration = 'iDuration5:3'
-printline New third interval duration = 'iSec5'
+printline Original fourth interval duration = 'iDuration4:3'
+printline New fourth interval duration = 'iSec4'
+printline Original fifth interval duration = 'iDuration5:3'
+printline New fifth interval duration = 'iSec5'
 
 ##calculate scaling ratio to get new interval duration from old
 scaleRatio1 = iSec1/iDuration1
