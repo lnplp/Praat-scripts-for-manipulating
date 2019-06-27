@@ -7,6 +7,6 @@ Open each script to see basic instructions for use, and attribution. These scrip
 
 **set-interval-duration2.script** allows the user to lengthen or shorten two consecutive Textgrid intervals through PSOLA resynthesis.
 
-**set-interval-duration3.script** allows the user to lengthen or shorten three consecutive Textgrid intervals through PSOLA resynthesis.
+**set-interval-duration3.script** allows the user to lengthen or shorten five consecutive Textgrid intervals through PSOLA resynthesis.
 
 **set-fileduration-intensity.script** allows the user to lengthen or shorten all soundfiles in a given directory through PSOLA resynthesis; average intensity ican be adjusted too.
