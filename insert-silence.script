@@ -2,12 +2,16 @@
 ## This is a reduced version of Daniel McCloy's white noise insertion script
 ## which can be used for example to clean up voiceless plosive hold phases prior to 
 ## cross-splicing. The script needs to be run FROM THE EDITOR WINDOW, and a 
-## section of the sound file needs to be selected before running. 
+## section of the sound file needs to be selected before running; this selection is
+## then replaced with white noise or silence.
 ##
-## The desired rms amplitude of the noise is hard-coded (in McCloy's script
+## The desired rms amplitude of the noise is hard-coded (in McCloy's original script
 ## it is measured in the surrounding context). If set to 0, pure silence is inserted.
 ## Usually more realistic is very low-amplitude noise; a good place to start is at 
 ## 0.0005.
+##
+## McCloy's script assumes there is a matching textgrid for the soundfile; this is 
+## not assumed here. The script ends by bringing up the manipulated soundfile.
 ##
 ## McCloy's script is at 
 ## https://github.com/drammock/praat-semiauto/blob/master/ReplaceSelectionWithNoise.praat
@@ -40,10 +44,4 @@ Remove
 
 selectObject: "Sound " + sn_name$
 Formula (part): sel_st, sel_nd, 1, 1, "randomGauss(0," + string$(rms) +")"
-
-plusObject: "TextGrid " + tg_name$
 View & Edit
-
-editor: "TextGrid " + tg_name$
-	Zoom: win_st, win_nd
-Select: sel_st, sel_nd
