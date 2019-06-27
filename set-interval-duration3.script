@@ -7,39 +7,37 @@
 ##
 ## The script runs within a user-specified directory on a single user-specified file.
 ##
-## The script is a simplified version of a more elaborate manipulation script written by Rachel Smith
-## (University of Glasgow). 
-##
 ## Last edited by Leendert Plug, June 2019.
 ###########################################################################################################
 
 form Specify directories and parameters for analysis
-   	comment Which directory contains your sound files? (No final slash!)
-	text sounddirectory N:\Faculty-of-AHC\Languages-Cultures-Societies\Subject-Areas\LingPhon\Staff file space\Leendert research\corley10\Jamie-audio\recording_24_June2019\4_grouped_without_restrictive\boy
+   	comment Which directory contains your sound files? (Split path where convenient.)
+	text sounddir1 N:\Faculty-of-AHC\Languages-Cultures-Societies\Subject-Areas\LingPhon\Staff file space\Leendert research\corley10\Jamie-audio\recording_24_June2019\4_grouped_without_restrictive\
+	text sounddir2 
     	comment What is the base name (without .wav) of the file you want to manipulate?
-	text base boy_repair
+	text base _conjunct
 	comment Which tier of the TextGrid object would you like to analyse?
 	integer tier 2
 	comment Specify the label of the first interval you want to measure over.
 	sentence Interval1 1
 	comment Desired first interval duration in ms:	
-	natural iMs1 712
+	natural iMs1 
 	comment Specify the label of the second interval you want to measure over.
 	sentence Interval2 2
 	comment Desired second interval duration in ms:	
-	natural iMs2 482
+	natural iMs2 
 	comment Specify the label of the third interval you want to measure over.
-	sentence Interval3 er
+	sentence Interval3 or
 	comment Desired third interval duration in ms:	
-	natural iMs3 365
+	natural iMs3 200
 	comment Specify the label of the fourth interval you want to measure over.
 	sentence Interval4 3
 	comment Desired fourth interval duration in ms:	
-	natural iMs4 482
+	natural iMs4 
 	comment Specify the label of the fifth interval you want to measure over.
 	sentence Interval5 4
 	comment Desired fifth interval duration in ms:	
-	natural iMs5 681
+	natural iMs5 
 endform
 
 ##convert iMs to seconds
@@ -48,6 +46,8 @@ iSec2 = iMs2/1000
 iSec3 = iMs3/1000
 iSec4 = iMs4/1000
 iSec5 = iMs5/1000
+
+sounddirectory$ = sounddir1$ + sounddir2$
 
 Read from file... 'sounddirectory$'\'base$'.wav
 Read from file... 'sounddirectory$'\'base$'.TextGrid
@@ -110,9 +110,9 @@ printline Scaling ratio for second interval = 'scaleRatio2:3'
 scaleRatio3 = iSec3/iDuration3
 printline Scaling ratio for third interval = 'scaleRatio3:3'
 scaleRatio4 = iSec4/iDuration4
-printline Scaling ratio for third interval = 'scaleRatio4:3'
+printline Scaling ratio for fourth interval = 'scaleRatio4:3'
 scaleRatio5 = iSec5/iDuration5
-printline Scaling ratio for third interval = 'scaleRatio5:3'
+printline Scaling ratio for fifth interval = 'scaleRatio5:3'
 
 ##select the Sound and make a Manipulation object:
 select Sound 'base$'
@@ -149,6 +149,10 @@ Replace duration tier
 select Manipulation 'base$'
 Get resynthesis (overlap-add)
 Write to WAV file... 'sounddirectory$'\'base$'_'iMs1'.wav
+
+##play the result for checking 
+select Sound 'base$'
+Play
 
 ##clean up by removing the temporary objects from the object list
 select Sound 'base$'
