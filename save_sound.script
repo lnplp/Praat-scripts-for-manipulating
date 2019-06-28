@@ -1,0 +1,8 @@
+form Directory path (split where appropriate)
+	text soundDir1 ...\
+	text soundDir2 ...
+endform
+
+soundDirectory$ = soundDir1$ + soundDir2$
+objectName$ = selected$ ("Sound")
+Write to WAV file... 'soundDirectory$'\'objectName$'.wav
