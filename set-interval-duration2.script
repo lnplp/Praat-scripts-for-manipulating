@@ -1,3 +1,15 @@
+###########################################################################################################
+## This script changes the duration of three consecutive Textgrid intervals through PSOLA resynthesis to
+## a user-specified target duration. The manipulation is not exact, but probably close enough for
+## most purposes. The way the duration points are added means that the intervals do not need to cover
+## the entire file duration, but they do need to be consecutive. The duration should be specified in 
+## milliseconds; this is converted into seconds where appropriate.
+##
+## The script runs within a user-specified directory on a single user-specified file.
+##
+## Last edited by Leendert Plug, June 2019.
+###########################################################################################################
+
 form Specify directories and parameters for analysis
    	comment Which directory contains your sound files? (Split path where convenient.)
 	text sounddir1 N:\Faculty-of-AHC\Languages-Cultures-Societies\Subject-Areas\LingPhon\Staff file space\Leendert research\corley10\Jamie-audio\recording_24_June2019\4_grouped_without_restrictive\
