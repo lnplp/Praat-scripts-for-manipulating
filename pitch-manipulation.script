@@ -1,0 +1,51 @@
+#####################################################################################
+## This script loops through a directory, creating a manipulation object for each
+## sound file and bringing it up for editing. Before bringing it up, the script 
+## stylizes the pitch contour (0.5 ST resolution) and adds a reference point to
+## facilitate manual editing (time 0.01, 130 Hz). The script saves the output of 
+## each manipulation, and before doing so, it sets the intensity (62 dB).
+##
+## Last edited by Leendert Plug, July 2019
+#####################################################################################
+
+form Directory and sound file extension
+   comment Specify the directory the script should run on by replacing '...' by the full path. Keep the final slash. 
+   sentence Directory1 N:\Faculty-of-AHC\Languages-Cultures-Societies\Subject-Areas\LingPhon\Staff file space\Leendert research\corley10\Jamie-audio\recording_24_June2019\5_regrouped_after_temporal_manip\
+   sentence Directory2 \
+   comment Edit the file extension if your sound files are not .wav.
+   sentence Extension .wav
+endform
+
+directory$ = directory1$ + directory2$
+
+Create Strings as file list... list 'directory$'*'extension$'
+number_of_files = Get number of strings
+for x from 1 to number_of_files
+     select Strings list
+     current_file$ = Get string... x
+     Read from file... 'directory$''current_file$'
+     object_name$ = selected$ ("Sound")
+     To Manipulation... 0.01 75 300
+     Extract pitch tier
+     Stylize... 0.5 semitones
+     Add point... 0.01 130
+     select Manipulation 'object_name$'
+     plus PitchTier 'object_name$'
+     Replace pitch tier
+     select Sound 'object_name$'
+     Remove
+     select Manipulation 'object_name$'
+     View & Edit
+     pause  Edit Textgrid! 
+     Get resynthesis (overlap-add)
+     Scale intensity... 62
+     Save as WAV file... Praat\pitch_intensity_'current_file$'
+     select Manipulation 'object_name$'
+     plus Sound 'object_name$'
+     plus PitchTier 'object_name$'
+     Remove
+endfor
+
+select Strings list
+Remove
+print Done.
