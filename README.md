@@ -3,7 +3,7 @@ Open each script to see basic instructions for use, and attribution. These scrip
 
 **insert-silence.script** replaces a selected section of a sound file with white noise at a user-specified amplitude.
 
-**pitch-manipulation.script** creates a manipulation object for each sound file in a specified directory and brings it up for editing; it also stylizes the pitch contour and sets the average intensity before saving the output. 
+**pitch-manipulation.script** creates a manipulation object with a stylized pitch contour for each sound file in a specified directory and brings it up for editing; it also sets the average intensity before saving the output. 
 
 **save-sound.script** is a simple utility script that speeds up writing a selected sound object to a sound file.
 
