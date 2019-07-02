@@ -8,10 +8,10 @@
 ## Last edited by Leendert Plug, July 2019
 #####################################################################################
 
-form Directory and sound file extension
-   comment Specify the directory the script should run on by replacing '...' by the full path. Keep the final slash. 
-   sentence Directory1 N:\Faculty-of-AHC\Languages-Cultures-Societies\Subject-Areas\LingPhon\Staff file space\Leendert research\corley10\Jamie-audio\recording_24_June2019\5_regrouped_after_temporal_manip\
-   sentence Directory2 \
+form 
+   comment Specify the directory the script should run on. Split the path where convenient, keeping the final slashes. 
+   sentence Directory1 ...\
+   sentence Directory2 ...\
    comment Edit the file extension if your sound files are not .wav.
    sentence Extension .wav
 endform
@@ -36,7 +36,7 @@ for x from 1 to number_of_files
      Remove
      select Manipulation 'object_name$'
      View & Edit
-     pause  Edit Textgrid! 
+     pause  Edit! 
      Get resynthesis (overlap-add)
      Scale intensity... 62
      Save as WAV file... Praat\pitch_intensity_'current_file$'
