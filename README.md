@@ -3,7 +3,9 @@ Open each script to see basic instructions for use, and attribution. These scrip
 
 **insert-silence.script** replaces a selected section of a sound file with white noise at a user-specified amplitude.
 
-**save_sound.script** is a simple utility script that speeds up writing a selected sound object to a sound file.
+**pitch-manipulation.script** creates a manipulation object for each sound file in a specified directory and brings it up for editing; it also stylizes the pitch contour and sets the average intensity before saving the output. 
+
+**save-sound.script** is a simple utility script that speeds up writing a selected sound object to a sound file.
 
 **set-interval-duration1.script** allows the user to lengthen or shorten a specific Textgrid interval through PSOLA resynthesis. The script loops through a directory.
 
